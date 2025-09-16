@@ -17,13 +17,13 @@
             overflow: hidden;
             margin: 0;
             padding: 0;
-            cursor: pointer;
         }
 
         main {
             width: 100vw;
             height: 100vh;
             position: relative;
+            background-color: #000; /* Fondo negro para transiciones */
         }
 
         .slide {
@@ -39,15 +39,13 @@
             padding: 4vw 5vw;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.7s ease-in-out, background-color 0.7s ease-in-out;
-            transform: scale(0.95);
+            transition: opacity 0.6s ease-in-out;
         }
 
         .slide.active {
             opacity: 1;
             visibility: visible;
-            transform: scale(1);
-            transition: all 0.7s ease-in-out;
+            z-index: 10;
         }
         
         /* Colores de fondo para cada sección */
@@ -60,7 +58,6 @@
         .bg-political { background: linear-gradient(135deg, #1E3A8A, #3B82F6); color: #EFF6FF; }
         .bg-coercive { background: linear-gradient(135deg, #581C87, #9333EA); color: #FAF5FF; }
         .bg-symbolic { background: linear-gradient(135deg, #854D0E, #FBBF24); color: #FEFCE8; }
-        .bg-bibliography { background-color: #1F2937; color: #D1D5DB; }
 
         .slide.active .content-item {
             opacity: 0;
@@ -148,7 +145,6 @@
             backdrop-filter: blur(10px);
         }
         
-        /* Estilos para la definición de poderes */
         .definition-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -159,6 +155,11 @@
         }
         .definition-item {
             text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .definition-item:hover {
+            transform: scale(1.05);
         }
         .definition-icon {
             font-size: 3rem;
@@ -166,10 +167,9 @@
             display: inline-block;
         }
 
-        /* NEW STYLES FOR EXAMPLE SLIDES */
         .example-flow {
             display: flex;
-            align-items: flex-start; /* Align items to the top */
+            align-items: flex-start;
             justify-content: center;
             gap: 1rem;
             width: 100%;
@@ -180,8 +180,13 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            flex: 1; /* Make steps take equal space */
-            max-width: 200px; /* Max width for each step */
+            flex: 1;
+            max-width: 200px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .example-step:hover {
+             transform: scale(1.05);
         }
         .example-icon {
             width: 90px;
@@ -199,12 +204,12 @@
         .example-text {
             font-size: 0.9rem;
             line-height: 1.4;
-            min-height: 60px; /* ensure consistent height */
+            min-height: 60px;
         }
         .example-connector {
             font-size: 2rem;
             opacity: 0.5;
-            margin-top: 30px; /* Align with the center of the icon */
+            margin-top: 30px;
         }
         .analysis-card {
             margin-top: 2rem;
@@ -222,9 +227,158 @@
         .bg-political .analysis-card { border-color: #93C5FD; }
         .bg-coercive .analysis-card { border-color: #D8B4FE; }
         .bg-symbolic .analysis-card { border-color: #FDE047; }
+        
+        #fullscreen-hint {
+            position: fixed;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+            background-color: rgba(0,0,0,0.2);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            z-index: 1000;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        #navigation-controls {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            background-color: rgba(0,0,0,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-arrow {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: transparent;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .nav-arrow:hover {
+            color: white;
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        #pagination-dots {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .pagination-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0;
+            border: none;
+        }
+        .pagination-dot:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        .pagination-dot.active {
+            background-color: white;
+            transform: scale(1.4);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            backdrop-filter: blur(5px);
+        }
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            position: relative;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 600px;
+            color: #fff;
+            transform: scale(0.95);
+            transition: transform 0.4s ease;
+        }
+        .modal-overlay.visible .modal-content {
+            transform: scale(1);
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+        .modal-close-btn:hover {
+            color: white;
+            transform: rotate(90deg);
+        }
+        .modal-content h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        .modal-content p, .modal-content li {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.9);
+        }
+        .modal-content ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 1rem;
+        }
+        .modal-content li {
+            padding-left: 1.5em;
+            text-indent: -1.5em;
+            margin-bottom: 0.5rem;
+        }
+        .modal-content .fa-li {
+            left: 0;
+            position: absolute;
+        }
     </style>
 </head>
 <body>
+
+    <div id="fullscreen-hint"></div>
 
     <main id="presentation">
         <!-- Portada -->
@@ -232,6 +386,10 @@
             <div class="text-center relative z-10">
                 <h1 class="text-5xl md:text-7xl font-bold tracking-tight stagger-1" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Los Cuatro Poderes de Thompson</h1>
                 <p class="text-xl md:text-2xl mt-4 font-light stagger-2" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Análisis de Caso: La Elección del Papa León XIV</p>
+                <div class="mt-12 stagger-3 text-white" style="text-shadow: 0 1px 3px rgba(0,0,0,0.5);">
+                    <p class="text-lg font-medium">William H Fonseca</p>
+                    <p class="text-md text-gray-300">Procesos de Comunicación (11358)</p>
+                </div>
             </div>
         </section>
 
@@ -309,17 +467,17 @@
                 <h2 class="text-4xl font-bold mb-4 content-item stagger-2">Poder Económico</h2>
                 <p class="text-lg text-orange-100 mb-8 content-item stagger-3">Es el poder que viene de controlar los recursos para producir bienes, intercambiarlos en un mercado y acumular capital.</p>
                 <div class="definition-grid">
-                    <div class="definition-item content-item stagger-3">
+                    <div class="definition-item content-item stagger-3" onclick="openModal('modal-eco-1')">
                         <i class="fa-solid fa-industry definition-icon"></i>
                         <h4 class="font-bold">Control de Producción</h4>
                         <p class="text-sm text-orange-200">Dominar los medios para crear bienes y servicios.</p>
                     </div>
-                    <div class="definition-item content-item stagger-4">
+                    <div class="definition-item content-item stagger-4" onclick="openModal('modal-eco-2')">
                         <i class="fa-solid fa-store definition-icon"></i>
                         <h4 class="font-bold">Intercambio en Mercado</h4>
                         <p class="text-sm text-orange-200">Capacidad de comprar y vender esos bienes.</p>
                     </div>
-                    <div class="definition-item content-item stagger-5">
+                    <div class="definition-item content-item stagger-5" onclick="openModal('modal-eco-3')">
                         <i class="fa-solid fa-piggy-bank definition-icon"></i>
                         <h4 class="font-bold">Acumulación de Capital</h4>
                         <p class="text-sm text-orange-200">Usar las ganancias para aumentar la riqueza y el poder.</p>
@@ -333,24 +491,24 @@
             <div class="w-full max-w-5xl text-center">
                 <h3 class="text-3xl font-bold mb-12 stagger-1">La Crisis Financiera del Vaticano</h3>
                 <div class="example-flow">
-                    <div class="example-step stagger-2">
+                    <div class="example-step stagger-2" onclick="openModal('modal-eco-crisis-1')">
                         <div class="example-icon"><i class="fa-solid fa-arrow-down-wide-short"></i></div>
-                        <p class="example-text">El Vaticano tenía un <span class="highlight">déficit presupuestario</span> reportado.</p>
+                        <p class="example-text">El Vaticano tenía un <span class="highlight">déficit presupuestario</span> y problemas en su fondo de pensiones.</p>
                     </div>
                     <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-4">
+                    <div class="example-step stagger-4" onclick="openModal('modal-eco-crisis-2')">
                         <div class="example-icon"><i class="fa-solid fa-user-tie"></i></div>
-                        <p class="example-text">Se necesitaba un Papa con <span class="highlight">perfil de "gestor"</span>.</p>
+                        <p class="example-text">Analistas sugerían la necesidad de un <span class="highlight">"recaudador de fondos, no un pastor"</span>.</p>
                     </div>
                     <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-6">
+                    <div class="example-step stagger-6" onclick="openModal('modal-eco-crisis-3')">
                         <div class="example-icon"><i class="fa-solid fa-brain"></i></div>
-                        <p class="example-text">La economía se volvió un <span class="highlight">factor clave</span> en la elección.</p>
+                        <p class="example-text">La <span class="highlight">sostenibilidad económica</span> se volvió un factor clave en la elección.</p>
                     </div>
                 </div>
                 <div class="analysis-card stagger-7">
                     <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
-                    <p class="text-sm">La falta de capital influyó en los criterios de selección. La urgencia por la sostenibilidad económica condicionó la decisión, favoreciendo un perfil con experiencia administrativa.</p>
+                    <p class="text-sm">La falta de capital influyó en los criterios de selección. La urgencia económica condicionó la decisión, favorecendo un perfil con experiencia administrativa capaz de fortalecer las arcas de la Iglesia, como se confirmó con la campaña global de donativos lanzada poco después.</p>
                 </div>
             </div>
         </section>
@@ -360,24 +518,24 @@
             <div class="w-full max-w-5xl text-center">
                 <h3 class="text-3xl font-bold mb-12 stagger-1">El Impacto del Turismo en Roma</h3>
                 <div class="example-flow">
-                    <div class="example-step stagger-2">
+                    <div class="example-step stagger-2" onclick="openModal('modal-eco-turismo-1')">
                         <div class="example-icon"><i class="fa-solid fa-plane"></i></div>
-                        <p class="example-text"><span class="highlight">Miles de turistas</span> y periodistas llegaron a la ciudad.</p>
+                        <p class="example-text"><span class="highlight">Miles de turistas</span> y periodistas llegaron masivamente a la ciudad.</p>
                     </div>
                     <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-4">
+                    <div class="example-step stagger-4" onclick="openModal('modal-eco-turismo-2')">
                         <div class="example-icon"><i class="fa-solid fa-hotel"></i></div>
                         <p class="example-text">Hoteles, vuelos y restaurantes <span class="highlight">se llenaron al instante</span>.</p>
                     </div>
                     <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-6">
+                    <div class="example-step stagger-6" onclick="openModal('modal-eco-turismo-3')">
                         <div class="example-icon"><i class="fa-solid fa-sack-dollar"></i></div>
-                        <p class="example-text">Se generaron <span class="highlight">cientos de millones de euros</span> en ganancias.</p>
+                        <p class="example-text">Eventos pasados generaron <span class="highlight">cientos de millones de euros</span> en ganancias para la ciudad.</p>
                     </div>
                 </div>
                 <div class="analysis-card stagger-7">
                     <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
-                    <p class="text-sm">La capacidad de la Iglesia para movilizar enormes flujos de consumo con un solo evento es una clara manifestación de poder económico. Su "actividad" simbólica tiene un impacto material masivo.</p>
+                    <p class="text-sm">La capacidad de la Iglesia para movilizar enormes flujos de consumo con un solo evento es una clara manifestación de poder económico. Su "actividad" simbólica tiene un impacto material masivo y directo en el mercado local.</p>
                 </div>
             </div>
         </section>
@@ -387,24 +545,24 @@
             <div class="w-full max-w-5xl text-center">
                 <h3 class="text-3xl font-bold mb-12 stagger-1">La Noticia como Negocio Millonario</h3>
                 <div class="example-flow">
-                    <div class="example-step stagger-2">
+                    <div class="example-step stagger-2" onclick="openModal('modal-eco-media-1')">
                         <div class="example-icon"><i class="fa-solid fa-tv"></i></div>
-                        <p class="example-text">Los medios <span class="highlight">compitieron por la audiencia 24/7</span>.</p>
+                        <p class="example-text">Los medios globales <span class="highlight">compitieron por la audiencia 24/7</span> con coberturas especiales.</p>
                     </div>
                     <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-4">
+                    <div class="example-step stagger-4" onclick="openModal('modal-eco-media-2')">
                         <div class="example-icon"><i class="fa-solid fa-rectangle-ad"></i></div>
-                        <p class="example-text">Más ojos = más <span class="highlight">plata en publicidad</span>.</p>
+                        <p class="example-text">Más atención global se traduce directamente en <span class="highlight">ingresos por publicidad</span>.</p>
                     </div>
                     <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-6">
+                    <div class="example-step stagger-6" onclick="openModal('modal-eco-media-3')">
                         <div class="example-icon"><i class="fa-solid fa-ticket"></i></div>
-                        <p class="example-text">La elección se vendió como el <span class="highlight">"show" global del año</span>.</p>
+                        <p class="example-text">El evento fue un <span class="highlight">producto informativo de alto valor</span> comercial.</p>
                     </div>
                 </div>
                 <div class="analysis-card stagger-7">
                     <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
-                    <p class="text-sm">El poder de las industrias mediáticas radica en su capacidad para transformar un bien simbólico (la noticia) en un bien de consumo. Controlan los medios de producción y difusión para generar ganancias.</p>
+                    <p class="text-sm">El poder de las industrias mediáticas radica en su capacidad para transformar un bien simbólico (la noticia) en un bien de consumo. Controlan los medios de producción y difusión para generar ganancias a partir del interés público.</p>
                 </div>
             </div>
         </section>
@@ -416,17 +574,17 @@
                 <h2 class="text-4xl font-bold mb-4 content-item stagger-2">Poder Político</h2>
                 <p class="text-lg text-blue-100 mb-8 content-item stagger-3">Es la capacidad de organizar grupos, regular su comportamiento a través de una autoridad reconocida y tomar decisiones que afectan a la comunidad.</p>
                 <div class="definition-grid">
-                    <div class="definition-item content-item stagger-3">
+                    <div class="definition-item content-item stagger-3" onclick="openModal('modal-pol-1')">
                         <i class="fa-solid fa-users-gear definition-icon"></i>
                         <h4 class="font-bold">Coordinar Personas</h4>
                         <p class="text-sm text-blue-200">Organizar la acción colectiva para lograr un objetivo.</p>
                     </div>
-                    <div class="definition-item content-item stagger-4">
+                    <div class="definition-item content-item stagger-4" onclick="openModal('modal-pol-2')">
                         <i class="fa-solid fa-scale-balanced definition-icon"></i>
                         <h4 class="font-bold">Establecer Normas</h4>
                         <p class="text-sm text-blue-200">Crear leyes y reglas que todos deben seguir.</p>
                     </div>
-                    <div class="definition-item content-item stagger-5">
+                    <div class="definition-item content-item stagger-5" onclick="openModal('modal-pol-3')">
                         <i class="fa-solid fa-stamp definition-icon"></i>
                         <h4 class="font-bold">Ejercer Autoridad</h4>
                         <p class="text-sm text-blue-200">Tener el derecho legítimo de tomar decisiones vinculantes.</p>
@@ -440,24 +598,24 @@
             <div class="w-full max-w-5xl text-center">
                 <h3 class="text-3xl font-bold mb-12 stagger-1">El Cónclave: Un Sistema Electoral Propio</h3>
                 <div class="example-flow">
-                    <div class="example-step stagger-2">
+                    <div class="example-step stagger-2" onclick="openModal('modal-pol-conclave-1')">
                         <div class="example-icon"><i class="fa-solid fa-scroll"></i></div>
-                        <p class="example-text">El cónclave se rige por <span class="highlight">leyes propias y centenarias</span>.</p>
+                        <p class="example-text">El cónclave se rige por la ley <span class="highlight">*Universi Dominici Gregis*</span>.</p>
                     </div>
                     <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-4">
+                    <div class="example-step stagger-4" onclick="openModal('modal-pol-conclave-2')">
                         <div class="example-icon"><i class="fa-solid fa-gavel"></i></div>
                         <p class="example-text">Es un <span class="highlight">proceso electoral autónomo</span>, un acto de soberanía.</p>
                     </div>
                     <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-6">
+                    <div class="example-step stagger-6" onclick="openModal('modal-pol-conclave-3')">
                         <div class="example-icon"><i class="fa-solid fa-users"></i></div>
-                        <p class="example-text">Coordina a líderes de todo el mundo para tomar <span class="highlight">una decisión vinculante</span>.</p>
+                        <p class="example-text">Coordina a <span class="highlight">133 cardenales</span> para tomar una decisión vinculante.</p>
                     </div>
                 </div>
                 <div class="analysis-card stagger-7">
                     <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
-                    <p class="text-sm">Se manifiesta en la capacidad de la institución para auto-regularse con un sistema de autoridad y leyes. Establece normas y coordina a sus miembros para elegir un líder. Es un claro ejercicio de gobierno.</p>
+                    <p class="text-sm">Se manifiesta en la capacidad de la institución para auto-regularse con un sistema de autoridad y leyes propias. Establece normas y coordina a sus miembros para elegir un líder, actuando con la autonomía de un Estado soberano.</p>
                 </div>
             </div>
         </section>
@@ -467,24 +625,24 @@
             <div class="w-full max-w-5xl text-center">
                 <h3 class="text-3xl font-bold mb-12 stagger-1">El Papa como Jefe de Estado Global</h3>
                 <div class="example-flow">
-                     <div class="example-step stagger-2">
+                     <div class="example-step stagger-2" onclick="openModal('modal-pol-estado-1')">
                         <div class="example-icon"><i class="fa-solid fa-chess-king"></i></div>
-                        <p class="example-text">El Papa no es solo un líder religioso, es un <span class="highlight">Jefe de Estado</span>.</p>
+                        <p class="example-text">El Papa no es solo un líder religioso, es el <span class="highlight">Jefe del Estado Vaticano</span>.</p>
                     </div>
                     <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-4">
+                    <div class="example-step stagger-4" onclick="openModal('modal-pol-estado-2')">
                         <div class="example-icon"><i class="fa-solid fa-handshake"></i></div>
-                        <p class="example-text">Su elección provoca <span class="highlight">reacciones diplomáticas</span> inmediatas.</p>
+                        <p class="example-text">Su elección provoca <span class="highlight">felicitaciones diplomáticas</span> inmediatas.</p>
                     </div>
                     <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-6">
+                    <div class="example-step stagger-6" onclick="openModal('modal-pol-estado-3')">
                         <div class="example-icon"><i class="fa-solid fa-comments"></i></div>
-                        <p class="example-text">Líderes políticos usan el evento en su <span class="highlight">discurso nacional</span>.</p>
+                        <p class="example-text">La presidenta de Perú lo usó en su discurso: <span class="highlight">"El Papa es peruano"</span>.</p>
                     </div>
                 </div>
                 <div class="analysis-card stagger-7">
                     <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
-                    <p class="text-sm">Se ejerce cuando un evento religioso influye en la agenda y las relaciones entre Estados. La elección se convierte en un activo de *soft power* que los gobiernos laicos utilizan para sus propios fines.</p>
+                    <p class="text-sm">Se ejerce cuando un evento religioso influye en la agenda y las relaciones entre Estados. La elección se convierte en un activo de <span class="highlight">influencia cultural y diplomática</span> (sin usar la fuerza) que los gobiernos laicos utilizan para sus propios fines.</p>
                 </div>
             </div>
         </section>
@@ -494,24 +652,24 @@
             <div class="w-full max-w-5xl text-center">
                 <h3 class="text-3xl font-bold mb-12 stagger-1">Estrategias y Alianzas Dentro del Cónclave</h3>
                 <div class="example-flow">
-                    <div class="example-step stagger-2">
+                    <div class="example-step stagger-2" onclick="openModal('modal-pol-estrategia-1')">
                         <div class="example-icon"><i class="fa-solid fa-vote-yea"></i></div>
-                        <p class="example-text">En el cónclave operan <span class="highlight">bloques y alianzas regionales</span>.</p>
+                        <p class="example-text">Dentro del cónclave operan <span class="highlight">bloques y alianzas</span> no oficiales.</p>
                     </div>
                     <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-4">
+                    <div class="example-step stagger-4" onclick="openModal('modal-pol-estrategia-2')">
                         <div class="example-icon"><i class="fa-solid fa-route"></i></div>
                         <p class="example-text">La elección define una <span class="highlight">dirección política y doctrinal</span> para la Iglesia.</p>
                     </div>
                     <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-6">
+                    <div class="example-step stagger-6" onclick="openModal('modal-pol-estrategia-3')">
                         <div class="example-icon"><i class="fa-solid fa-bullseye"></i></div>
-                        <p class="example-text">La victoria de Prevost fue vista como un apoyo a la <span class="highlight">línea reformista</span>.</p>
+                        <p class="example-text">Se interpretó como una victoria de la <span class="highlight">línea reformista moderada</span>.</p>
                     </div>
                 </div>
                 <div class="analysis-card stagger-7">
                     <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
-                    <p class="text-sm">Es la capacidad de coordinar voluntades y forjar una mayoría para tomar una decisión estratégica. La elección del líder se convierte en el principal acto político que define las "políticas" internas de la institución.</p>
+                    <p class="text-sm">Es la capacidad de coordinar voluntades y forjar una mayoría para tomar una decisión estratégica. La elección del líder se convierte en el principal acto político que define las "políticas" internas de la institución para los años venideros.</p>
                 </div>
             </div>
         </section>
@@ -523,17 +681,17 @@
                 <h2 class="text-4xl font-bold mb-4 content-item stagger-2">Poder Coercitivo</h2>
                 <p class="text-lg text-purple-100 mb-8 content-item stagger-3">Es el poder de imponer la voluntad y obligar a obedecer, ya sea mediante el uso de la fuerza física o la amenaza de castigos muy severos.</p>
                  <div class="definition-grid">
-                    <div class="definition-item content-item stagger-3">
+                    <div class="definition-item content-item stagger-3" onclick="openModal('modal-coe-1')">
                         <i class="fa-solid fa-hand-fist definition-icon"></i>
                         <h4 class="font-bold">Uso de la Fuerza</h4>
                         <p class="text-sm text-purple-200">Imposición directa a través de la violencia o el control físico.</p>
                     </div>
-                    <div class="definition-item content-item stagger-4">
+                    <div class="definition-item content-item stagger-4" onclick="openModal('modal-coe-2')">
                         <i class="fa-solid fa-triangle-exclamation definition-icon"></i>
                         <h4 class="font-bold">Amenaza de Castigo</h4>
                         <p class="text-sm text-purple-200">Lograr obediencia por el miedo a una sanción grave.</p>
                     </div>
-                    <div class="definition-item content-item stagger-5">
+                    <div class="definition-item content-item stagger-5" onclick="openModal('modal-coe-3')">
                         <i class="fa-solid fa-shield-halved definition-icon"></i>
                         <h4 class="font-bold">Instituciones de Control</h4>
                         <p class="text-sm text-purple-200">Ejércitos, policía o sistemas disciplinarios que lo aplican.</p>
@@ -547,17 +705,17 @@
             <div class="w-full max-w-5xl text-center">
                 <h3 class="text-3xl font-bold mb-12 stagger-1">La Excomunión: Amenaza del Máximo Castigo</h3>
                  <div class="example-flow">
-                    <div class="example-step stagger-2">
+                    <div class="example-step stagger-2" onclick="openModal('modal-coe-secreto-1')">
                         <div class="example-icon"><i class="fa-solid fa-file-signature"></i></div>
                         <p class="example-text">Todos los participantes hicieron un <span class="highlight">juramento de secreto</span>.</p>
                     </div>
                     <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-4">
+                    <div class="example-step stagger-4" onclick="openModal('modal-coe-secreto-2')">
                         <div class="example-icon"><i class="fa-solid fa-bolt"></i></div>
                         <p class="example-text">La pena por violarlo: <span class="highlight">excomunión automática</span>.</p>
                     </div>
                     <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-6">
+                    <div class="example-step stagger-6" onclick="openModal('modal-coe-secreto-3')">
                         <div class="example-icon"><i class="fa-solid fa-user-slash"></i></div>
                         <p class="example-text">Es la máxima sanción, que <span class="highlight">expulsa a alguien de la comunidad</span>.</p>
                     </div>
@@ -574,24 +732,24 @@
              <div class="w-full max-w-5xl text-center">
                 <h3 class="text-3xl font-bold mb-12 stagger-1">Encierro y Control Físico de los Cardenales</h3>
                  <div class="example-flow">
-                     <div class="example-step stagger-2">
+                     <div class="example-step stagger-2" onclick="openModal('modal-coe-control-1')">
                         <div class="example-icon"><i class="fa-solid fa-key"></i></div>
-                        <p class="example-text">Los cardenales fueron <span class="highlight">literalmente encerrados</span> sin contacto exterior.</p>
+                        <p class="example-text">Los cardenales fueron <span class="highlight">literalmente encerrados</span> (*conclave*: 'con llave').</p>
                     </div>
                     <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-4">
+                    <div class="example-step stagger-4" onclick="openModal('modal-coe-control-2')">
                         <div class="example-icon"><i class="fa-solid fa-user-shield"></i></div>
-                        <p class="example-text">El área fue custodiada por <span class="highlight">seguridad armada</span> (Guardia Suiza).</p>
+                        <p class="example-text">El área fue custodiada por la <span class="highlight">Guardia Suiza y la Gendarmería</span>.</p>
                     </div>
                     <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-6">
+                    <div class="example-step stagger-6" onclick="openModal('modal-coe-control-3')">
                         <div class="example-icon"><i class="fa-solid fa-ban"></i></div>
-                        <p class="example-text">Existía una infraestructura real para <span class="highlight">impedir físicamente cualquier fuga</span>.</p>
+                        <p class="example-text">Se usó infraestructura para <span class="highlight">impedir físicamente cualquier fuga</span> de información.</p>
                     </div>
                 </div>
                 <div class="analysis-card stagger-7">
                     <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
-                    <p class="text-sm">Se manifiesta en el uso de la fuerza y la infraestructura de seguridad para imponer un aislamiento físico. Aunque los cardenales obedecen, la estructura coercitiva está ahí para asegurar que se cumpla la norma.</p>
+                    <p class="text-sm">Se manifiesta en el uso de la fuerza y la infraestructura de seguridad para imponer un aislamiento físico. Aunque los cardenales obedecen por deber, la estructura coercitiva está ahí para asegurar que se cumpla la norma.</p>
                 </div>
             </div>
         </section>
@@ -601,24 +759,24 @@
             <div class="w-full max-w-5xl text-center">
                 <h3 class="text-3xl font-bold mb-12 stagger-1">La Ley Canónica: Disciplina y Sanción Interna</h3>
                 <div class="example-flow">
-                    <div class="example-step stagger-2">
+                    <div class="example-step stagger-2" onclick="openModal('modal-coe-ley-1')">
                         <div class="example-icon"><i class="fa-solid fa-book-open"></i></div>
                         <p class="example-text">La Iglesia tiene un cuerpo de <span class="highlight">leyes canónicas</span> para regularse.</p>
                     </div>
                     <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-4">
+                    <div class="example-step stagger-4" onclick="openModal('modal-coe-ley-2')">
                         <div class="example-icon"><i class="fa-solid fa-gavel"></i></div>
                         <p class="example-text">El Papa puede <span class="highlight">castigar delitos internos</span> graves, como los abusos.</p>
                     </div>
                     <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-6">
+                    <div class="example-step stagger-6" onclick="openModal('modal-coe-ley-3')">
                         <div class="example-icon"><i class="fa-solid fa-user-minus"></i></div>
                         <p class="example-text">Las penas incluyen la <span class="highlight">expulsión del estado clerical</span>.</p>
                     </div>
                 </div>
                 <div class="analysis-card stagger-7">
                     <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
-                    <p class="text-sm">Es la capacidad de imponer disciplina y orden dentro de la institución a través de un sistema legal propio y la aplicación de sanciones severas. Garantiza la obediencia a las normas internas.</p>
+                    <p class="text-sm">Es la capacidad de imponer disciplina y orden dentro de la institución a través de un sistema legal propio y la aplicación de sanciones severas, como la "línea dura" contra los abusos. Garantiza la obediencia a las normas internas.</p>
                 </div>
             </div>
         </section>
@@ -630,17 +788,17 @@
                 <h2 class="text-4xl font-bold mb-4 content-item stagger-2">Poder Simbólico</h2>
                 <p class="text-lg text-yellow-100 mb-8 content-item stagger-3">Es la capacidad de influir en las acciones y percepciones de otros a través de la creación y transmisión de símbolos, historias e ideas que le dan sentido al mundo.</p>
                  <div class="definition-grid">
-                    <div class="definition-item content-item stagger-3">
+                    <div class="definition-item content-item stagger-3" onclick="openModal('modal-sym-1')">
                         <i class="fa-solid fa-lightbulb definition-icon"></i>
                         <h4 class="font-bold">Producir Significado</h4>
                         <p class="text-sm text-yellow-200">Crear ideas y valores que la gente adopta.</p>
                     </div>
-                    <div class="definition-item content-item stagger-4">
+                    <div class="definition-item content-item stagger-4" onclick="openModal('modal-sym-2')">
                         <i class="fa-solid fa-film definition-icon"></i>
                         <h4 class="font-bold">Transmitir Símbolos</h4>
                         <p class="text-sm text-yellow-200">Usar imágenes, rituales y narrativas para comunicar.</p>
                     </div>
-                    <div class="definition-item content-item stagger-5">
+                    <div class="definition-item content-item stagger-5" onclick="openModal('modal-sym-3')">
                         <i class="fa-solid fa-people-arrows definition-icon"></i>
                         <h4 class="font-bold">Influir en Acciones</h4>
                         <p class="text-sm text-yellow-200">Lograr que la gente actúe o piense de cierta manera.</p>
@@ -654,24 +812,24 @@
             <div class="w-full max-w-5xl text-center">
                 <h3 class="text-3xl font-bold mb-12 stagger-1">El Poder de un Símbolo: La 'Fumata Blanca'</h3>
                 <div class="example-flow">
-                    <div class="example-step stagger-2">
+                    <div class="example-step stagger-2" onclick="openModal('modal-sym-fumata-1')">
                         <div class="example-icon"><i class="fa-solid fa-smog"></i></div>
                         <p class="example-text">Una simple <span class="highlight">columna de humo blanco</span> paralizó al mundo.</p>
                     </div>
                     <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-4">
+                    <div class="example-step stagger-4" onclick="openModal('modal-sym-fumata-2')">
                         <div class="example-icon"><i class="fa-solid fa-globe"></i></div>
-                        <p class="example-text">Un <span class="highlight">código visual universal</span> que todos entendieron.</p>
+                        <p class="example-text">Un <span class="highlight">código visual universal</span> que todos entendieron sin palabras.</p>
                     </div>
                     <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-6">
+                    <div class="example-step stagger-6" onclick="openModal('modal-sym-fumata-3')">
                         <div class="example-icon"><i class="fa-solid fa-heart"></i></div>
-                        <p class="example-text">Desencadenó una <span class="highlight">emoción compartida</span> a escala global.</p>
+                        <p class="example-text">Desencadenó una <span class="highlight">emoción compartida</span> y júbilo a escala global.</p>
                     </div>
                 </div>
                 <div class="analysis-card stagger-7">
                     <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
-                    <p class="text-sm">Es la capacidad de comunicar un mensaje complejo y movilizar emociones a nivel mundial a través de un simple ritual. El símbolo de la "fumata" trasciende idiomas, demostrando un inmenso poder de influencia.</p>
+                    <p class="text-sm">Es la capacidad de comunicar un mensaje complejo y movilizar emociones a nivel mundial a través de un simple ritual. El símbolo de la "fumata" trasciende idiomas y culturas, demostrando un inmenso poder de influencia.</p>
                 </div>
             </div>
         </section>
@@ -681,24 +839,24 @@
             <div class="w-full max-w-5xl text-center">
                 <h3 class="text-3xl font-bold mb-12 stagger-1">La Construcción de una Historia: El Papa 'Puente'</h3>
                 <div class="example-flow">
-                    <div class="example-step stagger-2">
+                    <div class="example-step stagger-2" onclick="openModal('modal-sym-puente-1')">
                         <div class="example-icon"><i class="fa-solid fa-newspaper"></i></div>
-                        <p class="example-text">La prensa creó la historia del Papa que <span class="highlight">une continentes</span>.</p>
+                        <p class="example-text">La prensa creó la historia del Papa que <span class="highlight">une Norte y Sur</span>.</p>
                     </div>
                     <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-4">
+                    <div class="example-step stagger-4" onclick="openModal('modal-sym-puente-2')">
                         <div class="example-icon"><i class="fa-solid fa-map-location-dot"></i></div>
-                        <p class="example-text">La narrativa "de Chicago a Chiclayo" se hizo viral.</p>
+                        <p class="example-text">La narrativa <span class="highlight">"de Chicago a Chiclayo"</span> se hizo viral.</p>
                     </div>
                     <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-6">
+                    <div class="example-step stagger-6" onclick="openModal('modal-sym-puente-3')">
                         <div class="example-icon"><i class="fa-solid fa-id-card"></i></div>
-                        <p class="example-text">Generó un <span class="highlight">fuerte efecto de identidad</span> y orgullo.</p>
+                        <p class="example-text">Generó un <span class="highlight">fuerte efecto de identidad</span> en peruanos y estadounidenses.</p>
                     </div>
                 </div>
                 <div class="analysis-card stagger-7">
                     <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
-                    <p class="text-sm">Se manifiesta en la capacidad de los medios para construir una historia (narrativa) que moldea la percepción pública. Esta historia, más que los hechos, es la que genera la conexión emocional e influye en millones.</p>
+                    <p class="text-sm">Se manifiesta en la capacidad de los medios para construir una historia (narrativa) que moldea la percepción pública. Esta historia, más que los hechos crudos, es la que genera la conexión emocional e influye en millones.</p>
                 </div>
             </div>
         </section>
@@ -708,19 +866,19 @@
             <div class="w-full max-w-5xl text-center">
                 <h3 class="text-3xl font-bold mb-12 stagger-1">El Poder de las Palabras: Nombre y Primer Mensaje</h3>
                 <div class="example-flow">
-                    <div class="example-step stagger-2">
+                    <div class="example-step stagger-2" onclick="openModal('modal-sym-nombre-1')">
                         <div class="example-icon"><i class="fa-solid fa-signature"></i></div>
-                        <p class="example-text">El nombre <span class="highlight">"León XIV"</span> lo conectó con una herencia de justicia social.</p>
+                        <p class="example-text">El nombre <span class="highlight">"León XIV"</span> lo conectó con la herencia de justicia social de León XIII.</p>
                     </div>
                     <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-4">
+                    <div class="example-step stagger-4" onclick="openModal('modal-sym-nombre-2')">
                         <div class="example-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
-                        <p class="example-text">Su primer mensaje ("tomados de la mano") posicionó <span class="highlight">símbolos de unidad</span>.</p>
+                        <p class="example-text">Su mensaje <span class="highlight">"tomados de la mano"</span> posicionó símbolos de unidad.</p>
                     </div>
                     <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
-                    <div class="example-step stagger-6">
+                    <div class="example-step stagger-6" onclick="openModal('modal-sym-nombre-3')">
                         <div class="example-icon"><i class="fa-solid fa-comments-dollar"></i></div>
-                        <p class="example-text">Estos actos simples se cargaron de <span class="highlight">un enorme significado</span>.</p>
+                        <p class="example-text">Estos actos simples se cargaron de un <span class="highlight">enorme significado</span> global.</p>
                     </div>
                 </div>
                 <div class="analysis-card stagger-7">
@@ -745,38 +903,110 @@
                 </div>
             </div>
         </section>
+        
+        <!-- Modals -->
+        <div id="modal-container">
+            <!-- Economic Definition Modals -->
+            <div id="modal-eco-1" class="modal-overlay bg-economic" onclick="closeModal('modal-eco-1')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-eco-1')">&times;</button><h3>Control de Producción</h3><p>Se refiere a dominar los recursos materiales y financieros necesarios para crear bienes. Esto incluye desde las materias primas y las herramientas (como una imprenta) hasta el capital financiero (dinero, crédito) para iniciar y expandir la actividad. Quien controla estos medios, controla qué se produce y cómo, ejerciendo así poder económico.</p></div></div>
+            <div id="modal-eco-2" class="modal-overlay bg-economic" onclick="closeModal('modal-eco-2')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-eco-2')">&times;</button><h3>Intercambio en Mercado</h3><p>Es la capacidad de transformar los bienes producidos en mercancías que se pueden comprar y vender. El poder no solo está en crear algo, sino en llevarlo a un mercado donde adquiere un valor económico. Las instituciones como las empresas mediáticas son expertas en convertir bienes simbólicos (noticias, entretenimiento) en productos rentables.</p></div></div>
+            <div id="modal-eco-3" class="modal-overlay bg-economic" onclick="closeModal('modal-eco-3')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-eco-3')">&times;</button><h3>Acumulación de Capital</h3><p>Este es el objetivo final del poder económico: utilizar las ganancias obtenidas en el mercado para reinvertir, expandir la capacidad de producción y, por lo tanto, aumentar la riqueza y la influencia. El capital acumulado permite a individuos y organizaciones tomar decisiones de mayor alcance y consolidar su dominio económico.</p></div></div>
+            
+            <!-- Economic Example Modals -->
+            <div id="modal-eco-crisis-1" class="modal-overlay bg-economic" onclick="closeModal('modal-eco-crisis-1')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-eco-crisis-1')">&times;</button><h3>Déficit Presupuestario</h3><p>Antes del cónclave, informes de agencias como Reuters y Newtral.es destacaban que la Santa Sede enfrentaba un serio déficit. Los gastos superaban a los ingresos y el fondo de pensiones para sus empleados presentaba problemas de sostenibilidad a largo plazo, creando una presión económica tangible.</p></div></div>
+            <div id="modal-eco-crisis-2" class="modal-overlay bg-economic" onclick="closeModal('modal-eco-crisis-2')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-eco-crisis-2')">&times;</button><h3>El Perfil de "Recaudador"</h3><p>Un analista vaticano, citado en los medios, advirtió que la situación era tan delicada que los cardenales "van a tener que elegir a un recaudador de fondos, no a un pastor". Esta frase resume la influencia del poder económico: la necesidad de capital se impuso como un criterio fundamental para el liderazgo.</p></div></div>
+            <div id="modal-eco-crisis-3" class="modal-overlay bg-economic" onclick="closeModal('modal-eco-crisis-3')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-eco-crisis-3')">&times;</button><h3>Una Elección Estratégica</h3><p>La elección de Prevost, con experiencia administrativa y lazos con comunidades generosas en EE.UU. y América Latina, se vio como una respuesta directa a esta crisis. El poder económico no solo se manifestó como un problema, sino como una fuerza que modeló activamente el resultado de la elección.</p></div></div>
+            <div id="modal-eco-turismo-1" class="modal-overlay bg-economic" onclick="closeModal('modal-eco-turismo-1')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-eco-turismo-1')">&times;</button><h3>Afluencia Masiva</h3><p>Inmediatamente después de la fumata blanca, las agencias de viajes y aerolíneas registraron un pico en las búsquedas y reservas hacia Roma. La ciudad se preparó para recibir a miles de peregrinos, periodistas y curiosos, demostrando el poder de atracción de un evento papal.</p></div></div>
+            <div id="modal-eco-turismo-2" class="modal-overlay bg-economic" onclick="closeModal('modal-eco-turismo-2')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-eco-turismo-2')">&times;</button><h3>Impacto en la Hostelería</h3><p>Toda la cadena de servicios de la ciudad se beneficia. Hoteles, restaurantes, transporte local y tiendas de souvenirs experimentan un aumento drástico en sus ventas. El evento se convierte en un motor económico que impulsa el consumo en toda la región.</p></div></div>
+            <div id="modal-eco-turismo-3" class="modal-overlay bg-economic" onclick="closeModal('modal-eco-turismo-3')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-eco-turismo-3')">&times;</button><h3>Cifras Millonarias</h3><p>Aunque las cifras exactas varían, eventos papales anteriores, como las Jornadas Mundiales de la Juventud o Jubileos, han demostrado generar impactos económicos de más de 500 millones de dólares para las ciudades anfitrionas. Esto muestra la escala del poder económico que puede movilizar la Iglesia.</p></div></div>
+            <div id="modal-eco-media-1" class="modal-overlay bg-economic" onclick="closeModal('modal-eco-media-1')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-eco-media-1')">&times;</button><h3>Cobertura Global</h3><p>Las principales cadenas de noticias del mundo, como CBS, Reuters y agencias de noticias, enviaron a sus corresponsales y establecieron sets de transmisión en vivo en la Plaza de San Pedro. La cobertura fue ininterrumpida, tratando el cónclave como uno de los eventos más importantes del año.</p></div></div>
+            <div id="modal-eco-media-2" class="modal-overlay bg-economic" onclick="closeModal('modal-eco-media-2')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-eco-media-2')">&times;</button><h3>Monetización de la Audiencia</h3><p>Para los medios, una audiencia global masiva es un recurso económico de primer orden. Los espacios publicitarios durante estas transmisiones especiales se cotizan a precios muy altos. El interés del público se convierte directamente en capital financiero para las empresas de comunicación.</p></div></div>
+            <div id="modal-eco-media-3" class="modal-overlay bg-economic" onclick="closeModal('modal-eco-media-3')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-eco-media-3')">&times;</button><h3>La "Mercancía" Informativa</h3><p>La elección papal se empaqueta como un producto atractivo: con expertos, gráficos, análisis y momentos de gran dramatismo (como la espera de la fumata). Este proceso de producción convierte un hecho religioso en una mercancía mediática, diseñada para ser consumida por el mayor número de personas posible.</p></div></div>
 
-        <!-- Bibliografía -->
-        <section class="slide bg-bibliography">
-            <div class="w-full max-w-5xl text-left">
-                <h2 class="text-3xl font-bold mb-6 text-center text-gray-100 stagger-1">Bibliografía</h2>
-                <div class="text-xs stagger-2">
-                    <ul class="space-y-2">
-                        <li>Carrascón, I. (2025, 9 de mayo). *La crisis económica que sufre el Vaticano, la primera tarea de León XIV*. Newtral.es. https://www.newtral.es/crisis-vaticano/20250509/</li>
-                        <li>Charry, F. (2018, 12 de septiembre). *Comunicación y contexto social de John B. Thompson*. Omnia Journal, 4(44). Universidad del Rosario. https://www.urosario.edu.co/en/node/17</li>
-                        <li>El Universal (Redacción). (2025, 8 de mayo). *FOTOS: Fumata blanca en la Capilla Sixtina, celebran miles elección de un nuevo Papa en El Vaticano*. El Universal (México). https://www.eluniversal.com.mx/mundo/fotos-fumata-blanca-en-la-capilla-sixtina-celebran-miles-eleccion-de-un-nuevo-papa-en-el-vaticano/</li>
-                        <li>Franco, T. (2025, 5 de mayo). *Lo que nadie te cuenta sobre el impacto económico de un nuevo Papa*. Revista Caras (México). https://www.caras.com.mx/arte-cultura/lo-que-nadie-te-cuenta-sobre-el-impacto-economico-de-un-nuevo-papa/</li>
-                        <li>Giraldo, C. (2025, 8 de mayo). *Robert Prevost, papa León XIV y su emotiva mención al Perú: "Un saludo de modo particular a mi querida diócesis de Chiclayo"*. Infobae. https://www.infobae.com/peru/2025/05/08/robert-francis-prevost-papa-leon-xiv-y-su-emotivo-saludo-al-peru-un-saludo-de-modo-particular-a-mi-querida-diocesis-de-chiclayo/</li>
-                        <li>Livesay, C. (2025, 7 de mayo). *At 2025 papal conclave, some contentious issues await the new pope*. CBS News. https://www.cbsnews.com/news/conclave-2025-pope-francis-replacement-contentious-issues/</li>
-                        <li>McElwee, J. (2025, 28 de abril). *New pope's challenges: Budget crisis, role of women and decline in Europe*. Reuters. https://www.reuters.com/world/europe/new-pope-will-face-vatican-budget-crisis-myriad-other-problems-2025-04-28/</li>
-                        <li>Opus Dei. (2025, 13 de septiembre). *De Chicago a Roma pasando por Perú: el Papa León XIV celebra 70 años*. Opusdei.org. https://opusdei.org/es/article/cumpleanos-papa-leon-xiv-14-septiembre-robert-francis-prevost/</li>
-                        <li>Ore, D. C. (2025, 8 de mayo). *"El papa León XIV es peruano, Dios ama el Perú": Dina Boluarte reacciona a la elección Robert Prevost*. Infobae. https://www.infobae.com/peru/2025/05/08/el-papa-leon-xiv-es-peruano-dios-ama-el-peru-dina-boluarte-reacciona-a-la-eleccion-robert-prevost/</li>
-                        <li>Sagastume, E. (2025, 8 de mayo). *Robert Francis Prevost es elegido Papa León XIV: El primer Papa estadounidense en la historia*. KKTV News. https://www.kktv.com/2025/05/09/robert-francis-prevost-es-elegido-papa-len-xiv-el-primer-papa-estadounidense-en-la-historia/</li>
-                        <li>White, C. & Grimaldi, J. (2025, 8 de mayo). *HABEMUS PAPAM: Leo XIV is 1st US pope chosen to lead Catholic Church*. National Catholic Reporter. https://www.ncronline.org/vatican/habemus-papam-leo-xiv-1st-american-pope-chosen-lead-catholic-church</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+            <!-- Political Definition Modals -->
+            <div id="modal-pol-1" class="modal-overlay bg-political" onclick="closeModal('modal-pol-1')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-pol-1')">&times;</button><h3>Coordinar Personas</h3><p>El poder político fundamentalmente consiste en organizar a los individuos para que actúen de forma colectiva. Implica la capacidad de movilizar y dirigir a una comunidad hacia objetivos comunes, estableciendo un orden en la interacción social que de otro modo sería caótica.</p></div></div>
+            <div id="modal-pol-2" class="modal-overlay bg-political" onclick="closeModal('modal-pol-2')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-pol-2')">&times;</button><h3>Establecer Normas</h3><p>Para coordinar a la gente, el poder político se apoya en un sistema de reglas, procedimientos y leyes. Estas normas definen lo que es permitido y lo que no, y autorizan a ciertos individuos (gobernantes, jueces) a actuar en nombre de la comunidad, creando así una estructura de gobierno.</p></div></div>
+            <div id="modal-pol-3" class="modal-overlay bg-political" onclick="closeModal('modal-pol-3')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-pol-3')">&times;</button><h3>Ejercer Autoridad</h3><p>La autoridad es el reconocimiento social de que una persona o institución tiene el derecho legítimo de tomar decisiones que son obligatorias para la comunidad. El Estado es el ejemplo máximo, pero cualquier organización con una jerarquía y reglas (como la Iglesia) ejerce autoridad sobre sus miembros.</p></div></div>
+
+            <!-- Political Example Modals -->
+            <div id="modal-pol-conclave-1" class="modal-overlay bg-political" onclick="closeModal('modal-pol-conclave-1')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-pol-conclave-1')">&times;</button><h3>Universi Dominici Gregis</h3><p>No es un proceso improvisado. La elección se rige por una constitución apostólica específica que detalla cada paso: desde cómo deben comportarse los cardenales hasta los porcentajes de votos necesarios. Es un código legal que demuestra la capacidad de la Iglesia para gobernarse a sí misma.</p></div></div>
+            <div id="modal-pol-conclave-2" class="modal-overlay bg-political" onclick="closeModal('modal-pol-conclave-2')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-pol-conclave-2')">&times;</button><h3>Autonomía y Soberanía</h3><p>El cónclave se celebra sin ninguna injerencia de poderes externos. La Ciudad del Vaticano, como Estado soberano, ejerce su poder político para asegurar que la decisión sea puramente interna. Este aislamiento refuerza su autoridad y legitimidad ante el mundo.</p></div></div>
+            <div id="modal-pol-conclave-3" class="modal-overlay bg-political" onclick="closeModal('modal-pol-conclave-3')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-pol-conclave-3')">&times;</button><h3>Coordinación Global</h3><p>El poder político de la Iglesia se manifiesta en su capacidad para reunir a 133 líderes (cardenales) de todos los continentes, coordinarlos bajo un mismo techo y un mismo reglamento, y producir una decisión única y aceptada por todos: la elección de un nuevo líder para 1.300 millones de personas.</p></div></div>
+            <div id="modal-pol-estado-1" class="modal-overlay bg-political" onclick="closeModal('modal-pol-estado-1')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-pol-estado-1')">&times;</button><h3>Doble Rol: Pastor y Monarca</h3><p>El Papa es el líder espiritual de la Iglesia Católica y, simultáneamente, el monarca absoluto del Estado de la Ciudad del Vaticano. Este doble rol le otorga una posición única en el mundo, interactuando con otros líderes mundiales de igual a igual en el plano diplomático.</p></div></div>
+            <div id="modal-pol-estado-2" class="modal-overlay bg-political" onclick="closeModal('modal-pol-estado-2')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-pol-estado-2')">&times;</button><h3>Reacciones de Gobiernos</h3><p>Tras el anuncio, la Casa Blanca, el Departamento de Estado de EE. UU. y la embajada en Lima emitieron comunicados. No felicitaban solo a un líder religioso, sino al nuevo jefe de un Estado con el que mantienen relaciones diplomáticas. Es un acto de protocolo político.</p></div></div>
+            <div id="modal-pol-estado-3" class="modal-overlay bg-political" onclick="closeModal('modal-pol-estado-3')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-pol-estado-3')">&times;</button><h3>Uso en el Discurso Nacional</h3><p>La presidenta de Perú, Dina Boluarte, utilizó la nacionalidad peruana de Prevost para fortalecer un mensaje de orgullo nacional: "El Papa es peruano, Dios ama el Perú". Este es un ejemplo claro de cómo un actor político utiliza un evento religioso para sus propios fines de cohesión y legitimidad interna.</p></div></div>
+            <div id="modal-pol-estrategia-1" class="modal-overlay bg-political" onclick="closeModal('modal-pol-estrategia-1')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-pol-estrategia-1')">&times;</button><h3>Facciones Internas</h3><p>Aunque no son partidos políticos formales, dentro del Colegio Cardenalicio existen diferentes sensibilidades y "facciones": conservadores, moderados y reformistas. Durante el cónclave, estas facciones negocian y buscan consensos para que el candidato elegido se alinee con su visión de la Iglesia.</p></div></div>
+            <div id="modal-pol-estrategia-2" class="modal-overlay bg-political" onclick="closeModal('modal-pol-estrategia-2')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-pol-estrategia-2')">&times;</button><h3>Una Decisión Programática</h3><p>La elección de un Papa no es solo sobre una persona, sino sobre un programa. Los cardenales votan pensando en los desafíos futuros: la crisis económica, el rol de la mujer, el declive de la fe en Europa. La elección de Prevost se interpretó como un voto por la continuidad de las reformas de Francisco.</p></div></div>
+            <div id="modal-pol-estrategia-3" class="modal-overlay bg-political" onclick="closeModal('modal-pol-estrategia-3')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-pol-estrategia-3')">&times;</button><h3>Cálculo Pragmático</h3><p>Incluso la edad es un factor político. Con 69 años, Prevost fue visto como una opción de equilibrio: ni un pontificado de transición (muy corto) ni uno excesivamente largo que pudiera concentrar demasiado poder. Es una decisión política pragmática para asegurar una gestión estable.</p></div></div>
+            
+            <!-- Coercive Definition Modals -->
+            <div id="modal-coe-1" class="modal-overlay bg-coercive" onclick="closeModal('modal-coe-1')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-coe-1')">&times;</button><h3>Uso de la Fuerza</h3><p>Es la manifestación más directa del poder coercitivo. Implica la aplicación de fuerza física para someter a un oponente, infligir daño o restringir su libertad. Instituciones como el ejército o la policía son los agentes paradigmáticos de este tipo de poder, que busca la obediencia a través de la imposición física.</p></div></div>
+            <div id="modal-coe-2" class="modal-overlay bg-coercive" onclick="closeModal('modal-coe-2')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-coe-2')">&times;</button><h3>Amenaza de Castigo</h3><p>El poder coercitivo no siempre necesita usar la fuerza; a menudo basta con la amenaza creíble de un castigo severo. La coacción funciona por el miedo a las consecuencias. Sanciones como la excomunión, aunque no son físicas, son tan graves dentro de su comunidad que obligan a la obediencia de forma efectiva.</p></div></div>
+            <div id="modal-coe-3" class="modal-overlay bg-coercive" onclick="closeModal('modal-coe-3')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-coe-3')">&times;</button><h3>Instituciones de Control</h3><p>Son las organizaciones especializadas en ejercer la coerción de manera sistemática. El Estado moderno reclama el monopolio del uso legítimo de la fuerza a través de la policía y el ejército. A menor escala, sistemas penitenciarios o disciplinarios dentro de otras organizaciones también cumplen esta función de control.</p></div></div>
+            
+            <!-- Coercitive Example Modals -->
+            <div id="modal-coe-secreto-1" class="modal-overlay bg-coercive" onclick="closeModal('modal-coe-secreto-1')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-coe-secreto-1')">&times;</button><h3>El Juramento Solemne</h3><p>Antes de entrar en la Capilla Sixtina, cada cardenal elector, así como todo el personal de apoyo (médicos, técnicos, etc.), debe prestar un juramento solemne. En él, se comprometen bajo la gravedad del pecado a mantener secreto absoluto sobre todo lo que ocurra durante el cónclave.</p></div></div>
+            <div id="modal-coe-secreto-2" class="modal-overlay bg-coercive" onclick="closeModal('modal-coe-secreto-2')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-coe-secreto-2')">&times;</button><h3>La Pena de Excomunión</h3><p>La ley de la Iglesia (el Código de Derecho Canónico) establece que la violación de este secreto pontificio se castiga con la excomunión *latae sententiae*, es decir, automática. No requiere un juicio; en el momento en que se comete el acto, la persona queda fuera de la comunión de la Iglesia.</p></div></div>
+            <div id="modal-coe-secreto-3" class="modal-overlay bg-coercive" onclick="closeModal('modal-coe-secreto-3')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-coe-secreto-3')">&times;</button><h3>Un Disuasivo Efectivo</h3><p>Para un católico, y especialmente para un cardenal, la excomunión es la pena espiritual más grave posible. Es una "muerte" social y religiosa. Esta amenaza, aunque no física, es un mecanismo coercitivo extremadamente poderoso que garantiza la obediencia y el silencio.</p></div></div>
+            <div id="modal-coe-control-1" class="modal-overlay bg-coercive" onclick="closeModal('modal-coe-control-1')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-coe-control-1')">&times;</button><h3>El Significado de "Cónclave"</h3><p>La palabra viene del latín *cum clave* ("con llave"). Históricamente, se encerraba a los cardenales para forzarlos a tomar una decisión rápida. Hoy, el propósito es garantizar el aislamiento total del mundo exterior, impidiendo cualquier tipo de influencia o presión externa.</p></div></div>
+            <div id="modal-coe-control-2" class="modal-overlay bg-coercive" onclick="closeModal('modal-coe-control-2')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-coe-control-2')">&times;</button><h3>Seguridad Física</h3><p>El control no es solo una norma, es físico. La Guardia Suiza, el cuerpo militar del Vaticano, y la Gendarmería Vaticana (su fuerza policial) custodian todas las entradas y perímetros de la zona del cónclave. Nadie entra ni sale sin la debida autorización.</p></div></div>
+            <div id="modal-coe-control-3" class="modal-overlay bg-coercive" onclick="closeModal('modal-coe-control-3')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-coe-control-3')">&times;</button><h3>Barrido Electrónico</h3><p>Además del control físico, técnicos especializados realizan barridos en la Capilla Sixtina y en la Casa Santa Marta para detectar y neutralizar cualquier dispositivo de escucha o transmisión. Esto es una forma de coerción tecnológica para imponer el silencio.</p></div></div>
+            <div id="modal-coe-ley-1" class="modal-overlay bg-coercive" onclick="closeModal('modal-coe-ley-1')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-coe-ley-1')">&times;</button><h3>El Código de Derecho Canónico</h3><p>La Iglesia Católica opera con su propio sistema legal completo, similar al de un Estado. Este código establece los derechos y obligaciones de todos los fieles, así como los delitos y las penas correspondientes. Es la herramienta fundamental para mantener la disciplina en una institución global.</p></div></div>
+            <div id="modal-coe-ley-2" class="modal-overlay bg-coercive" onclick="closeModal('modal-coe-ley-2')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-coe-ley-2')">&times;</button><h3>Autoridad para Sancionar</h3><p>El Papa y los obispos tienen la autoridad para iniciar procesos canónicos contra clérigos acusados de delitos graves. Esto se hizo especialmente relevante en la política de "tolerancia cero" contra los abusos, una política que el Papa León XIV se esperaba que continuara, ejerciendo así su poder coercitivo para purgar la institución.</p></div></div>
+            <div id="modal-coe-ley-3" class="modal-overlay bg-coercive" onclick="closeModal('modal-coe-ley-3')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-coe-ley-3')">&times;</button><h3>La Expulsión como Pena</h3><p>Una de las penas más severas para un sacerdote es la "expulsión del estado clerical" (a menudo llamado "laicización"). Es el equivalente a una destitución y deshonra pública, y representa el poder coercitivo de la Iglesia para hacer cumplir sus normas más fundamentales.</p></div></div>
+            
+            <!-- Symbolic Definition Modals -->
+            <div id="modal-sym-1" class="modal-overlay bg-symbolic" onclick="closeModal('modal-sym-1')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-sym-1')">&times;</button><h3>Producir Significado</h3><p>El poder simbólico comienza con la capacidad de crear y definir los significados que una sociedad acepta como válidos. Quien logra establecer qué es "bueno", "verdadero" o "importante" está moldeando la manera en que los demás perciben la realidad, y por tanto, cómo actuarán en ella.</p></div></div>
+            <div id="modal-sym-2" class="modal-overlay bg-symbolic" onclick="closeModal('modal-sym-2')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-sym-2')">&times;</button><h3>Transmitir Símbolos</h3><p>No basta con crear significado; hay que difundirlo. Este poder depende de los medios de comunicación e información (desde un púlpito hasta la televisión o internet). Quien controla estos canales puede transmitir sus símbolos (imágenes, rituales, narrativas) a una audiencia masiva, haciendo que sus ideas se vuelvan dominantes.</p></div></div>
+            <div id="modal-sym-3" class="modal-overlay bg-symbolic" onclick="closeModal('modal-sym-3')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-sym-3')">&times;</button><h3>Influir en Acciones</h3><p>Este es el resultado final del poder simbólico. Al moldear las creencias y valores de las personas, se influye indirectamente en sus acciones. La gente actúa en función de lo que cree y valora. Por tanto, influir en sus mentes es una forma sutil pero extremadamente poderosa de dirigir el curso de los acontecimientos.</p></div></div>
+            
+            <!-- Symbolic Example Modals -->
+            <div id="modal-sym-fumata-1" class="modal-overlay bg-symbolic" onclick="closeModal('modal-sym-fumata-1')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-sym-fumata-1')">&times;</button><h3>La Espera Global</h3><p>Durante los días del cónclave, cámaras de todo el mundo apuntan a una sola chimenea. Esta expectación convierte un simple conducto de humo en el centro del mundo simbólico. La "fumata" es un símbolo de suspenso y resolución.</p></div></div>
+            <div id="modal-sym-fumata-2" class="modal-overlay bg-symbolic" onclick="closeModal('modal-sym-fumata-2')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-sym-fumata-2')">&times;</button><h3>Un Símbolo Transcultural</h3><p>Lo poderoso de la fumata es que no necesita traducción. Una persona en Tokio, Buenos Aires o El Cairo entiende el significado del humo blanco instantáneamente. Es un símbolo que unifica a una audiencia global diversa en un solo momento compartido.</p></div></div>
+            <div id="modal-sym-fumata-3" class="modal-overlay bg-symbolic" onclick="closeModal('modal-sym-fumata-3')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-sym-fumata-3')">&times;</button><h3>La Explosión de Júbilo</h3><p>El humo blanco no solo informa, sino que provoca una reacción emocional masiva. Las imágenes de la multitud en la Plaza de San Pedro, llorando de alegría y ondeando banderas, se convierten a su vez en un poderoso símbolo de la unidad y vitalidad de la Iglesia.</p></div></div>
+            <div id="modal-sym-puente-1" class="modal-overlay bg-symbolic" onclick="closeModal('modal-sym-puente-1')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-sym-puente-1')">&times;</button><h3>La Creación del Relato</h3><p>Los medios no solo reportaron un hecho, construyeron un relato. La idea del "Papa puente" fue una narrativa poderosa que simplificó la compleja biografía de Prevost en un símbolo fácil de entender: la unión entre el mundo desarrollado (EE.UU.) y el mundo en desarrollo (Perú).</p></div></div>
+            <div id="modal-sym-puente-2" class="modal-overlay bg-symbolic" onclick="closeModal('modal-sym-puente-2')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-sym-puente-2')">&times;</button><h3>Un Lema Pegadizo</h3><p>El titular "de Chicago a Chiclayo", repetido por medios y hasta por diplomáticos, funcionó como un eslogan. Condensó la narrativa en una frase memorable que reforzaba el símbolo del Papa como unificador de culturas.</p></div></div>
+            <div id="modal-sym-puente-3" class="modal-overlay bg-symbolic" onclick="closeModal('modal-sym-puente-3')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-sym-puente-3')">&times;</button><h3>Apropiación Cultural</h3><p>El poder de este símbolo se vio en cómo fue adoptado por la gente. En Perú, los memes del "Papa chiclayano" y las declaraciones de la presidenta mostraron una apropiación de la figura papal como un símbolo de orgullo nacional. En EE.UU., los fieles declararon que "podían relacionarse más" con él. El símbolo generó pertenencia.</p></div></div>
+            <div id="modal-sym-nombre-1" class="modal-overlay bg-symbolic" onclick="closeModal('modal-sym-nombre-1')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-sym-nombre-1')">&times;</button><h3>La Herencia de un Nombre</h3><p>Elegir un nombre papal es el primer acto de gobierno simbólico. "León" evoca la figura de León XIII, un Papa de finales del siglo XIX famoso por su encíclica *Rerum Novarum*, considerada la carta fundacional de la Doctrina Social de la Iglesia. Al elegir este nombre, Prevost se alineó simbólicamente con esa tradición de justicia social y diálogo con el mundo moderno.</p></div></div>
+            <div id="modal-sym-nombre-2" class="modal-overlay bg-symbolic" onclick="closeModal('modal-sym-nombre-2')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-sym-nombre-2')">&times;</button><h3>El Primer Mensaje</h3><p>Las primeras palabras de un Papa son analizadas minuciosamente. La frase "tomados de la mano entre nosotros" fue un símbolo verbal de colegialidad y unidad. En un mundo polarizado, este mensaje de colaboración y "paz a todos" fue interpretado por los medios como una declaración de intenciones de su pontificado: ser un Papa conciliador.</p></div></div>
+            <div id="modal-sym-nombre-3" class="modal-overlay bg-symbolic" onclick="closeModal('modal-sym-nombre-3')"><div class="modal-content" onclick="event.stopPropagation()"><button class="modal-close-btn" onclick="closeModal('modal-sym-nombre-3')">&times;</button><h3>El Poder del Lenguaje</h3><p>El uso del italiano y el español en su primer saludo no fue casual. Fue un gesto simbólico de inclusión hacia la gran masa de fieles de habla hispana. Cada palabra, cada gesto, como citar a San Agustín (de su propia orden religiosa) en misas posteriores, se convierte en un símbolo que refuerza su identidad y su programa pastoral.</p></div></div>
+        </div>
+
+        <div id="navigation-controls">
+            <button id="prev-btn" class="nav-arrow" aria-label="Anterior"><i class="fa-solid fa-arrow-left"></i></button>
+            <div id="pagination-dots" class="flex gap-3 items-center"></div>
+            <button id="next-btn" class="nav-arrow" aria-label="Siguiente"><i class="fa-solid fa-arrow-right"></i></button>
+        </div>
     </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const slides = document.querySelectorAll('.slide');
+            const fullscreenHint = document.getElementById('fullscreen-hint');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const paginationDotsContainer = document.getElementById('pagination-dots');
             let currentSlide = 0;
+
+            slides.forEach((_, i) => {
+                const dot = document.createElement('button');
+                dot.classList.add('pagination-dot');
+                dot.setAttribute('aria-label', `Ir a la diapositiva ${i + 1}`);
+                dot.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    currentSlide = i;
+                    showSlide(currentSlide);
+                });
+                paginationDotsContainer.appendChild(dot);
+            });
+
+            const dots = document.querySelectorAll('.pagination-dot');
 
             function showSlide(index) {
                 slides.forEach((slide, i) => {
                     slide.classList.toggle('active', i === index);
+                });
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
                 });
             }
 
@@ -789,25 +1019,59 @@
                 currentSlide = (currentSlide - 1 + slides.length) % slides.length;
                 showSlide(currentSlide);
             }
-
-            document.body.addEventListener('click', (e) => {
-                if (e.target.tagName.toLowerCase() === 'a' || e.target.tagName.toLowerCase() === 'button') {
-                    return;
+            
+            function updateFullscreenHint() {
+                if (document.fullscreenElement) {
+                    fullscreenHint.textContent = 'Presiona F11 para salir';
+                } else {
+                    fullscreenHint.textContent = 'Presiona F11 para pantalla completa';
                 }
+            }
+
+            prevBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                prevSlide();
+            });
+
+            nextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
                 nextSlide();
             });
+
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowRight' || e.key === ' ') {
+                if (e.key === 'ArrowRight') {
                     e.preventDefault();
                     nextSlide();
                 } else if (e.key === 'ArrowLeft') {
                     e.preventDefault();
                     prevSlide();
+                } else if (e.key === 'Escape') {
+                    const visibleModal = document.querySelector('.modal-overlay.visible');
+                    if (visibleModal) {
+                        closeModal(visibleModal.id);
+                    }
                 }
             });
             
+            document.addEventListener('fullscreenchange', updateFullscreenHint);
+            
             showSlide(currentSlide);
+            updateFullscreenHint();
         });
+
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if(modal) {
+                modal.classList.add('visible');
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if(modal) {
+                modal.classList.remove('visible');
+            }
+        }
     </script>
 </body>
 </html>
