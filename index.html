@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentación: Poderes de Thompson en la Elección Papal</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        main {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4vw 5vw;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.7s ease-in-out, background-color 0.7s ease-in-out;
+            transform: scale(0.95);
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+            transition: all 0.7s ease-in-out;
+        }
+        
+        /* Colores de fondo para cada sección */
+        .bg-intro { 
+            background: linear-gradient(135deg, #1e3a8a, #111827);
+            color: #F3F4F6; 
+        }
+        .bg-context { background: linear-gradient(135deg, #064E3B, #10B981); color: #F0FDFA; }
+        .bg-economic { background: linear-gradient(135deg, #92400E, #F97316); color: #FFF7ED; }
+        .bg-political { background: linear-gradient(135deg, #1E3A8A, #3B82F6); color: #EFF6FF; }
+        .bg-coercive { background: linear-gradient(135deg, #581C87, #9333EA); color: #FAF5FF; }
+        .bg-symbolic { background: linear-gradient(135deg, #854D0E, #FBBF24); color: #FEFCE8; }
+        .bg-bibliography { background-color: #1F2937; color: #D1D5DB; }
+
+        .slide.active .content-item {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn-Up 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn-Up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Staggered animation delays */
+        .slide.active .stagger-1 { animation-delay: 0.2s; }
+        .slide.active .stagger-2 { animation-delay: 0.4s; }
+        .slide.active .stagger-3 { animation-delay: 0.6s; }
+        .slide.active .stagger-4 { animation-delay: 0.8s; }
+        .slide.active .stagger-5 { animation-delay: 1.0s; }
+        .slide.active .stagger-6 { animation-delay: 1.2s; }
+        .slide.active .stagger-7 { animation-delay: 1.4s; }
+
+
+        .power-icon-lg {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+            max-width: 1000px;
+            position: relative;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 40px; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            z-index: 1; 
+        }
+        .timeline-point {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 30%;
+            position: relative; 
+            z-index: 2;
+        }
+        .timeline-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            background-color: white; 
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            color: #10B981;
+        }
+        .timeline-content { margin-top: 1.5rem; }
+        .timeline-content h3 { color: #fff; font-weight: 700; }
+
+        .highlight { font-weight: 700; text-shadow: 0 0 5px rgba(0,0,0,0.3); }
+        .bg-economic .highlight { color: #FBBF24; }
+        .bg-political .highlight { color: #93C5FD; }
+        .bg-coercive .highlight { color: #D8B4FE; }
+        .bg-symbolic .highlight { color: #FDE047; }
+        
+        .card {
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            height: 100%;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Estilos para la definición de poderes */
+        .definition-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 900px;
+            margin-top: 2rem;
+        }
+        .definition-item {
+            text-align: center;
+        }
+        .definition-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        /* NEW STYLES FOR EXAMPLE SLIDES */
+        .example-flow {
+            display: flex;
+            align-items: flex-start; /* Align items to the top */
+            justify-content: center;
+            gap: 1rem;
+            width: 100%;
+            margin-bottom: 2.5rem;
+        }
+        .example-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex: 1; /* Make steps take equal space */
+            max-width: 200px; /* Max width for each step */
+        }
+        .example-icon {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background-color: rgba(0,0,0,0.2);
+            border: 3px solid rgba(255,255,255,0.3);
+            flex-shrink: 0;
+        }
+        .example-text {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            min-height: 60px; /* ensure consistent height */
+        }
+        .example-connector {
+            font-size: 2rem;
+            opacity: 0.5;
+            margin-top: 30px; /* Align with the center of the icon */
+        }
+        .analysis-card {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            background-color: rgba(0,0,0,0.25);
+            border-top: 4px solid;
+            max-width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            backdrop-filter: blur(5px);
+            text-align: left;
+        }
+        .bg-economic .analysis-card { border-color: #FBBF24; }
+        .bg-political .analysis-card { border-color: #93C5FD; }
+        .bg-coercive .analysis-card { border-color: #D8B4FE; }
+        .bg-symbolic .analysis-card { border-color: #FDE047; }
+    </style>
+</head>
+<body>
+
+    <main id="presentation">
+        <!-- Portada -->
+        <section class="slide active bg-intro">
+            <div class="text-center relative z-10">
+                <h1 class="text-5xl md:text-7xl font-bold tracking-tight stagger-1" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Los Cuatro Poderes de Thompson</h1>
+                <p class="text-xl md:text-2xl mt-4 font-light stagger-2" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Análisis de Caso: La Elección del Papa León XIV</p>
+            </div>
+        </section>
+
+        <!-- Contexto 1: Línea de Tiempo -->
+        <section class="slide bg-context">
+            <div class="w-full max-w-6xl">
+                <h2 class="text-4xl font-bold mb-16 text-center stagger-1">La Historia en Tres Actos</h2>
+                <div class="timeline stagger-2">
+                    <div class="timeline-point">
+                        <div class="timeline-icon"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                        <div class="timeline-content">
+                            <h3 class="font-bold text-xl">ANTES</h3>
+                            <ul class="text-sm mt-2 list-none p-0">
+                                <li>• Crisis financiera en el Vaticano.</li>
+                                <li>• Búsqueda de un Papa "gestor".</li>
+                                <li>• Tensión entre facciones internas.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-point">
+                        <div class="timeline-icon"><i class="fa-solid fa-door-closed"></i></div>
+                        <div class="timeline-content">
+                            <h3 class="font-bold text-xl">DURANTE</h3>
+                             <ul class="text-sm mt-2 list-none p-0">
+                                <li>• 133 cardenales aislados.</li>
+                                <li>• Juramento de secreto absoluto.</li>
+                                <li>• 8 de mayo: "Fumata blanca".</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-point">
+                        <div class="timeline-icon"><i class="fa-solid fa-bullhorn"></i></div>
+                        <div class="timeline-content">
+                            <h3 class="font-bold text-xl">DESPUÉS</h3>
+                             <ul class="text-sm mt-2 list-none p-0">
+                                <li>• Anuncio: Robert F. Prevost es León XIV.</li>
+                                <li>• Celebraciones masivas en EE.UU. y Perú.</li>
+                                <li>• Reacciones de líderes mundiales.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Contexto 2: Relevancia del Hecho -->
+        <section class="slide bg-context">
+            <div class="w-full max-w-5xl">
+                <h2 class="text-4xl font-bold mb-8 text-center stagger-1">¿Por Qué Fue un Suceso Tan Importante?</h2>
+                 <div class="grid md:grid-cols-2 gap-6 items-center text-left">
+                     <div class="card stagger-2">
+                        <h3 class="font-bold text-lg mb-2"><i class="fa-solid fa-flag-usa mr-2 text-white"></i> El Primer Papa de EE.UU.</h3>
+                        <p class="text-sm">Rompió con siglos de tradición. Por primera vez, un ciudadano de la principal superpotencia mundial lideraba la Iglesia, un giro con enormes implicaciones culturales y geopolíticas.</p>
+                    </div>
+                     <div class="card stagger-3">
+                        <h3 class="font-bold text-lg mb-2"><i class="fa-solid fa-bridge mr-2 text-white"></i> Un Puente entre Continentes</h3>
+                        <p class="text-sm">Su vida como misionero en Perú lo convirtió en un símbolo de conexión entre el Norte y el Sur global. Era el "Papa de Chicago a Chiclayo".</p>
+                    </div>
+                     <div class="card stagger-4">
+                        <h3 class="font-bold text-lg mb-2"><i class="fa-solid fa-hands-holding-child mr-2 text-white"></i> Un Perfil Pastoral</h3>
+                        <p class="text-sm">Como miembro de la orden agustina, su perfil era visto como una señal de continuidad con el enfoque en la gente y la reforma del Papa Francisco.</p>
+                    </div>
+                     <div class="card stagger-5">
+                        <h3 class="font-bold text-lg mb-2"><i class="fa-solid fa-sitemap mr-2 text-white"></i> Un Nombramiento Estratégico</h3>
+                        <p class="text-sm">Su experiencia previa como Prefecto le daba un conocimiento clave de la estructura interna de la Iglesia, cualidad vital para liderar en tiempos de cambio.</p>
+                    </div>
+                 </div>
+            </div>
+        </section>
+
+        <!-- Económico 1: Definición -->
+        <section class="slide bg-economic">
+            <div class="w-full max-w-4xl text-center">
+                <div class="content-item stagger-1"><i class="fa-solid fa-coins power-icon-lg" style="color:#FBBF24;"></i></div>
+                <h2 class="text-4xl font-bold mb-4 content-item stagger-2">Poder Económico</h2>
+                <p class="text-lg text-orange-100 mb-8 content-item stagger-3">Es el poder que viene de controlar los recursos para producir bienes, intercambiarlos en un mercado y acumular capital.</p>
+                <div class="definition-grid">
+                    <div class="definition-item content-item stagger-3">
+                        <i class="fa-solid fa-industry definition-icon"></i>
+                        <h4 class="font-bold">Control de Producción</h4>
+                        <p class="text-sm text-orange-200">Dominar los medios para crear bienes y servicios.</p>
+                    </div>
+                    <div class="definition-item content-item stagger-4">
+                        <i class="fa-solid fa-store definition-icon"></i>
+                        <h4 class="font-bold">Intercambio en Mercado</h4>
+                        <p class="text-sm text-orange-200">Capacidad de comprar y vender esos bienes.</p>
+                    </div>
+                    <div class="definition-item content-item stagger-5">
+                        <i class="fa-solid fa-piggy-bank definition-icon"></i>
+                        <h4 class="font-bold">Acumulación de Capital</h4>
+                        <p class="text-sm text-orange-200">Usar las ganancias para aumentar la riqueza y el poder.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Económico 2: Aplicación - Contexto Financiero -->
+        <section class="slide bg-economic">
+            <div class="w-full max-w-5xl text-center">
+                <h3 class="text-3xl font-bold mb-12 stagger-1">La Crisis Financiera del Vaticano</h3>
+                <div class="example-flow">
+                    <div class="example-step stagger-2">
+                        <div class="example-icon"><i class="fa-solid fa-arrow-down-wide-short"></i></div>
+                        <p class="example-text">El Vaticano tenía un <span class="highlight">déficit presupuestario</span> reportado.</p>
+                    </div>
+                    <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-4">
+                        <div class="example-icon"><i class="fa-solid fa-user-tie"></i></div>
+                        <p class="example-text">Se necesitaba un Papa con <span class="highlight">perfil de "gestor"</span>.</p>
+                    </div>
+                    <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-6">
+                        <div class="example-icon"><i class="fa-solid fa-brain"></i></div>
+                        <p class="example-text">La economía se volvió un <span class="highlight">factor clave</span> en la elección.</p>
+                    </div>
+                </div>
+                <div class="analysis-card stagger-7">
+                    <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
+                    <p class="text-sm">La falta de capital influyó en los criterios de selección. La urgencia por la sostenibilidad económica condicionó la decisión, favoreciendo un perfil con experiencia administrativa.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Económico 3: Aplicación - Impacto Directo -->
+        <section class="slide bg-economic">
+            <div class="w-full max-w-5xl text-center">
+                <h3 class="text-3xl font-bold mb-12 stagger-1">El Impacto del Turismo en Roma</h3>
+                <div class="example-flow">
+                    <div class="example-step stagger-2">
+                        <div class="example-icon"><i class="fa-solid fa-plane"></i></div>
+                        <p class="example-text"><span class="highlight">Miles de turistas</span> y periodistas llegaron a la ciudad.</p>
+                    </div>
+                    <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-4">
+                        <div class="example-icon"><i class="fa-solid fa-hotel"></i></div>
+                        <p class="example-text">Hoteles, vuelos y restaurantes <span class="highlight">se llenaron al instante</span>.</p>
+                    </div>
+                    <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-6">
+                        <div class="example-icon"><i class="fa-solid fa-sack-dollar"></i></div>
+                        <p class="example-text">Se generaron <span class="highlight">cientos de millones de euros</span> en ganancias.</p>
+                    </div>
+                </div>
+                <div class="analysis-card stagger-7">
+                    <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
+                    <p class="text-sm">La capacidad de la Iglesia para movilizar enormes flujos de consumo con un solo evento es una clara manifestación de poder económico. Su "actividad" simbólica tiene un impacto material masivo.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Económico 4: Aplicación - Noticia como Negocio -->
+        <section class="slide bg-economic">
+            <div class="w-full max-w-5xl text-center">
+                <h3 class="text-3xl font-bold mb-12 stagger-1">La Noticia como Negocio Millonario</h3>
+                <div class="example-flow">
+                    <div class="example-step stagger-2">
+                        <div class="example-icon"><i class="fa-solid fa-tv"></i></div>
+                        <p class="example-text">Los medios <span class="highlight">compitieron por la audiencia 24/7</span>.</p>
+                    </div>
+                    <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-4">
+                        <div class="example-icon"><i class="fa-solid fa-rectangle-ad"></i></div>
+                        <p class="example-text">Más ojos = más <span class="highlight">plata en publicidad</span>.</p>
+                    </div>
+                    <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-6">
+                        <div class="example-icon"><i class="fa-solid fa-ticket"></i></div>
+                        <p class="example-text">La elección se vendió como el <span class="highlight">"show" global del año</span>.</p>
+                    </div>
+                </div>
+                <div class="analysis-card stagger-7">
+                    <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
+                    <p class="text-sm">El poder de las industrias mediáticas radica en su capacidad para transformar un bien simbólico (la noticia) en un bien de consumo. Controlan los medios de producción y difusión para generar ganancias.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Político 1: Definición -->
+        <section class="slide bg-political">
+             <div class="w-full max-w-4xl text-center">
+                <div class="content-item stagger-1"><i class="fa-solid fa-landmark power-icon-lg" style="color:#93C5FD;"></i></div>
+                <h2 class="text-4xl font-bold mb-4 content-item stagger-2">Poder Político</h2>
+                <p class="text-lg text-blue-100 mb-8 content-item stagger-3">Es la capacidad de organizar grupos, regular su comportamiento a través de una autoridad reconocida y tomar decisiones que afectan a la comunidad.</p>
+                <div class="definition-grid">
+                    <div class="definition-item content-item stagger-3">
+                        <i class="fa-solid fa-users-gear definition-icon"></i>
+                        <h4 class="font-bold">Coordinar Personas</h4>
+                        <p class="text-sm text-blue-200">Organizar la acción colectiva para lograr un objetivo.</p>
+                    </div>
+                    <div class="definition-item content-item stagger-4">
+                        <i class="fa-solid fa-scale-balanced definition-icon"></i>
+                        <h4 class="font-bold">Establecer Normas</h4>
+                        <p class="text-sm text-blue-200">Crear leyes y reglas que todos deben seguir.</p>
+                    </div>
+                    <div class="definition-item content-item stagger-5">
+                        <i class="fa-solid fa-stamp definition-icon"></i>
+                        <h4 class="font-bold">Ejercer Autoridad</h4>
+                        <p class="text-sm text-blue-200">Tener el derecho legítimo de tomar decisiones vinculantes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Político 2: Aplicación - Gobierno Interno -->
+        <section class="slide bg-political">
+            <div class="w-full max-w-5xl text-center">
+                <h3 class="text-3xl font-bold mb-12 stagger-1">El Cónclave: Un Sistema Electoral Propio</h3>
+                <div class="example-flow">
+                    <div class="example-step stagger-2">
+                        <div class="example-icon"><i class="fa-solid fa-scroll"></i></div>
+                        <p class="example-text">El cónclave se rige por <span class="highlight">leyes propias y centenarias</span>.</p>
+                    </div>
+                    <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-4">
+                        <div class="example-icon"><i class="fa-solid fa-gavel"></i></div>
+                        <p class="example-text">Es un <span class="highlight">proceso electoral autónomo</span>, un acto de soberanía.</p>
+                    </div>
+                    <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-6">
+                        <div class="example-icon"><i class="fa-solid fa-users"></i></div>
+                        <p class="example-text">Coordina a líderes de todo el mundo para tomar <span class="highlight">una decisión vinculante</span>.</p>
+                    </div>
+                </div>
+                <div class="analysis-card stagger-7">
+                    <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
+                    <p class="text-sm">Se manifiesta en la capacidad de la institución para auto-regularse con un sistema de autoridad y leyes. Establece normas y coordina a sus miembros para elegir un líder. Es un claro ejercicio de gobierno.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Político 3: Aplicación - Actor Internacional -->
+        <section class="slide bg-political">
+            <div class="w-full max-w-5xl text-center">
+                <h3 class="text-3xl font-bold mb-12 stagger-1">El Papa como Jefe de Estado Global</h3>
+                <div class="example-flow">
+                     <div class="example-step stagger-2">
+                        <div class="example-icon"><i class="fa-solid fa-chess-king"></i></div>
+                        <p class="example-text">El Papa no es solo un líder religioso, es un <span class="highlight">Jefe de Estado</span>.</p>
+                    </div>
+                    <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-4">
+                        <div class="example-icon"><i class="fa-solid fa-handshake"></i></div>
+                        <p class="example-text">Su elección provoca <span class="highlight">reacciones diplomáticas</span> inmediatas.</p>
+                    </div>
+                    <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-6">
+                        <div class="example-icon"><i class="fa-solid fa-comments"></i></div>
+                        <p class="example-text">Líderes políticos usan el evento en su <span class="highlight">discurso nacional</span>.</p>
+                    </div>
+                </div>
+                <div class="analysis-card stagger-7">
+                    <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
+                    <p class="text-sm">Se ejerce cuando un evento religioso influye en la agenda y las relaciones entre Estados. La elección se convierte en un activo de *soft power* que los gobiernos laicos utilizan para sus propios fines.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Político 4: Aplicación - Estrategia y Alianzas -->
+        <section class="slide bg-political">
+            <div class="w-full max-w-5xl text-center">
+                <h3 class="text-3xl font-bold mb-12 stagger-1">Estrategias y Alianzas Dentro del Cónclave</h3>
+                <div class="example-flow">
+                    <div class="example-step stagger-2">
+                        <div class="example-icon"><i class="fa-solid fa-vote-yea"></i></div>
+                        <p class="example-text">En el cónclave operan <span class="highlight">bloques y alianzas regionales</span>.</p>
+                    </div>
+                    <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-4">
+                        <div class="example-icon"><i class="fa-solid fa-route"></i></div>
+                        <p class="example-text">La elección define una <span class="highlight">dirección política y doctrinal</span> para la Iglesia.</p>
+                    </div>
+                    <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-6">
+                        <div class="example-icon"><i class="fa-solid fa-bullseye"></i></div>
+                        <p class="example-text">La victoria de Prevost fue vista como un apoyo a la <span class="highlight">línea reformista</span>.</p>
+                    </div>
+                </div>
+                <div class="analysis-card stagger-7">
+                    <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
+                    <p class="text-sm">Es la capacidad de coordinar voluntades y forjar una mayoría para tomar una decisión estratégica. La elección del líder se convierte en el principal acto político que define las "políticas" internas de la institución.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Coercitivo 1: Definición -->
+        <section class="slide bg-coercive">
+            <div class="w-full max-w-4xl text-center">
+                <div class="content-item stagger-1"><i class="fa-solid fa-lock power-icon-lg" style="color:#D8B4FE;"></i></div>
+                <h2 class="text-4xl font-bold mb-4 content-item stagger-2">Poder Coercitivo</h2>
+                <p class="text-lg text-purple-100 mb-8 content-item stagger-3">Es el poder de imponer la voluntad y obligar a obedecer, ya sea mediante el uso de la fuerza física o la amenaza de castigos muy severos.</p>
+                 <div class="definition-grid">
+                    <div class="definition-item content-item stagger-3">
+                        <i class="fa-solid fa-hand-fist definition-icon"></i>
+                        <h4 class="font-bold">Uso de la Fuerza</h4>
+                        <p class="text-sm text-purple-200">Imposición directa a través de la violencia o el control físico.</p>
+                    </div>
+                    <div class="definition-item content-item stagger-4">
+                        <i class="fa-solid fa-triangle-exclamation definition-icon"></i>
+                        <h4 class="font-bold">Amenaza de Castigo</h4>
+                        <p class="text-sm text-purple-200">Lograr obediencia por el miedo a una sanción grave.</p>
+                    </div>
+                    <div class="definition-item content-item stagger-5">
+                        <i class="fa-solid fa-shield-halved definition-icon"></i>
+                        <h4 class="font-bold">Instituciones de Control</h4>
+                        <p class="text-sm text-purple-200">Ejércitos, policía o sistemas disciplinarios que lo aplican.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Coercitivo 2: Aplicación - Sanción Máxima -->
+        <section class="slide bg-coercive">
+            <div class="w-full max-w-5xl text-center">
+                <h3 class="text-3xl font-bold mb-12 stagger-1">La Excomunión: Amenaza del Máximo Castigo</h3>
+                 <div class="example-flow">
+                    <div class="example-step stagger-2">
+                        <div class="example-icon"><i class="fa-solid fa-file-signature"></i></div>
+                        <p class="example-text">Todos los participantes hicieron un <span class="highlight">juramento de secreto</span>.</p>
+                    </div>
+                    <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-4">
+                        <div class="example-icon"><i class="fa-solid fa-bolt"></i></div>
+                        <p class="example-text">La pena por violarlo: <span class="highlight">excomunión automática</span>.</p>
+                    </div>
+                    <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-6">
+                        <div class="example-icon"><i class="fa-solid fa-user-slash"></i></div>
+                        <p class="example-text">Es la máxima sanción, que <span class="highlight">expulsa a alguien de la comunidad</span>.</p>
+                    </div>
+                </div>
+                <div class="analysis-card stagger-7">
+                    <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
+                    <p class="text-sm">Aunque no es violencia física, la amenaza de una sanción tan devastadora funciona como un disuasivo coercitivo. Obliga a mantener el secreto absoluto a través de la coacción, no de la simple voluntad.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Coercitivo 3: Aplicación - Control Físico -->
+        <section class="slide bg-coercive">
+             <div class="w-full max-w-5xl text-center">
+                <h3 class="text-3xl font-bold mb-12 stagger-1">Encierro y Control Físico de los Cardenales</h3>
+                 <div class="example-flow">
+                     <div class="example-step stagger-2">
+                        <div class="example-icon"><i class="fa-solid fa-key"></i></div>
+                        <p class="example-text">Los cardenales fueron <span class="highlight">literalmente encerrados</span> sin contacto exterior.</p>
+                    </div>
+                    <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-4">
+                        <div class="example-icon"><i class="fa-solid fa-user-shield"></i></div>
+                        <p class="example-text">El área fue custodiada por <span class="highlight">seguridad armada</span> (Guardia Suiza).</p>
+                    </div>
+                    <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-6">
+                        <div class="example-icon"><i class="fa-solid fa-ban"></i></div>
+                        <p class="example-text">Existía una infraestructura real para <span class="highlight">impedir físicamente cualquier fuga</span>.</p>
+                    </div>
+                </div>
+                <div class="analysis-card stagger-7">
+                    <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
+                    <p class="text-sm">Se manifiesta en el uso de la fuerza y la infraestructura de seguridad para imponer un aislamiento físico. Aunque los cardenales obedecen, la estructura coercitiva está ahí para asegurar que se cumpla la norma.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Coercitivo 4: Aplicación - Disciplina Institucional -->
+        <section class="slide bg-coercive">
+            <div class="w-full max-w-5xl text-center">
+                <h3 class="text-3xl font-bold mb-12 stagger-1">La Ley Canónica: Disciplina y Sanción Interna</h3>
+                <div class="example-flow">
+                    <div class="example-step stagger-2">
+                        <div class="example-icon"><i class="fa-solid fa-book-open"></i></div>
+                        <p class="example-text">La Iglesia tiene un cuerpo de <span class="highlight">leyes canónicas</span> para regularse.</p>
+                    </div>
+                    <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-4">
+                        <div class="example-icon"><i class="fa-solid fa-gavel"></i></div>
+                        <p class="example-text">El Papa puede <span class="highlight">castigar delitos internos</span> graves, como los abusos.</p>
+                    </div>
+                    <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-6">
+                        <div class="example-icon"><i class="fa-solid fa-user-minus"></i></div>
+                        <p class="example-text">Las penas incluyen la <span class="highlight">expulsión del estado clerical</span>.</p>
+                    </div>
+                </div>
+                <div class="analysis-card stagger-7">
+                    <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
+                    <p class="text-sm">Es la capacidad de imponer disciplina y orden dentro de la institución a través de un sistema legal propio y la aplicación de sanciones severas. Garantiza la obediencia a las normas internas.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Simbólico 1: Definición -->
+        <section class="slide bg-symbolic">
+            <div class="w-full max-w-4xl text-center">
+                <div class="content-item stagger-1"><i class="fa-solid fa-dove power-icon-lg" style="color:#FDE047;"></i></div>
+                <h2 class="text-4xl font-bold mb-4 content-item stagger-2">Poder Simbólico</h2>
+                <p class="text-lg text-yellow-100 mb-8 content-item stagger-3">Es la capacidad de influir en las acciones y percepciones de otros a través de la creación y transmisión de símbolos, historias e ideas que le dan sentido al mundo.</p>
+                 <div class="definition-grid">
+                    <div class="definition-item content-item stagger-3">
+                        <i class="fa-solid fa-lightbulb definition-icon"></i>
+                        <h4 class="font-bold">Producir Significado</h4>
+                        <p class="text-sm text-yellow-200">Crear ideas y valores que la gente adopta.</p>
+                    </div>
+                    <div class="definition-item content-item stagger-4">
+                        <i class="fa-solid fa-film definition-icon"></i>
+                        <h4 class="font-bold">Transmitir Símbolos</h4>
+                        <p class="text-sm text-yellow-200">Usar imágenes, rituales y narrativas para comunicar.</p>
+                    </div>
+                    <div class="definition-item content-item stagger-5">
+                        <i class="fa-solid fa-people-arrows definition-icon"></i>
+                        <h4 class="font-bold">Influir en Acciones</h4>
+                        <p class="text-sm text-yellow-200">Lograr que la gente actúe o piense de cierta manera.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Simbólico 2: Aplicación - Rituales Universales -->
+        <section class="slide bg-symbolic">
+            <div class="w-full max-w-5xl text-center">
+                <h3 class="text-3xl font-bold mb-12 stagger-1">El Poder de un Símbolo: La 'Fumata Blanca'</h3>
+                <div class="example-flow">
+                    <div class="example-step stagger-2">
+                        <div class="example-icon"><i class="fa-solid fa-smog"></i></div>
+                        <p class="example-text">Una simple <span class="highlight">columna de humo blanco</span> paralizó al mundo.</p>
+                    </div>
+                    <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-4">
+                        <div class="example-icon"><i class="fa-solid fa-globe"></i></div>
+                        <p class="example-text">Un <span class="highlight">código visual universal</span> que todos entendieron.</p>
+                    </div>
+                    <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-6">
+                        <div class="example-icon"><i class="fa-solid fa-heart"></i></div>
+                        <p class="example-text">Desencadenó una <span class="highlight">emoción compartida</span> a escala global.</p>
+                    </div>
+                </div>
+                <div class="analysis-card stagger-7">
+                    <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
+                    <p class="text-sm">Es la capacidad de comunicar un mensaje complejo y movilizar emociones a nivel mundial a través de un simple ritual. El símbolo de la "fumata" trasciende idiomas, demostrando un inmenso poder de influencia.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Simbólico 3: Aplicación - Construcción de Narrativas -->
+        <section class="slide bg-symbolic">
+            <div class="w-full max-w-5xl text-center">
+                <h3 class="text-3xl font-bold mb-12 stagger-1">La Construcción de una Historia: El Papa 'Puente'</h3>
+                <div class="example-flow">
+                    <div class="example-step stagger-2">
+                        <div class="example-icon"><i class="fa-solid fa-newspaper"></i></div>
+                        <p class="example-text">La prensa creó la historia del Papa que <span class="highlight">une continentes</span>.</p>
+                    </div>
+                    <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-4">
+                        <div class="example-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+                        <p class="example-text">La narrativa "de Chicago a Chiclayo" se hizo viral.</p>
+                    </div>
+                    <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-6">
+                        <div class="example-icon"><i class="fa-solid fa-id-card"></i></div>
+                        <p class="example-text">Generó un <span class="highlight">fuerte efecto de identidad</span> y orgullo.</p>
+                    </div>
+                </div>
+                <div class="analysis-card stagger-7">
+                    <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
+                    <p class="text-sm">Se manifiesta en la capacidad de los medios para construir una historia (narrativa) que moldea la percepción pública. Esta historia, más que los hechos, es la que genera la conexión emocional e influye en millones.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Simbólico 4: Aplicación - Poder del Mensaje -->
+        <section class="slide bg-symbolic">
+            <div class="w-full max-w-5xl text-center">
+                <h3 class="text-3xl font-bold mb-12 stagger-1">El Poder de las Palabras: Nombre y Primer Mensaje</h3>
+                <div class="example-flow">
+                    <div class="example-step stagger-2">
+                        <div class="example-icon"><i class="fa-solid fa-signature"></i></div>
+                        <p class="example-text">El nombre <span class="highlight">"León XIV"</span> lo conectó con una herencia de justicia social.</p>
+                    </div>
+                    <div class="example-connector stagger-3"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-4">
+                        <div class="example-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                        <p class="example-text">Su primer mensaje ("tomados de la mano") posicionó <span class="highlight">símbolos de unidad</span>.</p>
+                    </div>
+                    <div class="example-connector stagger-5"><i class="fa-solid fa-arrow-right"></i></div>
+                    <div class="example-step stagger-6">
+                        <div class="example-icon"><i class="fa-solid fa-comments-dollar"></i></div>
+                        <p class="example-text">Estos actos simples se cargaron de <span class="highlight">un enorme significado</span>.</p>
+                    </div>
+                </div>
+                <div class="analysis-card stagger-7">
+                    <h4 class="font-bold text-lg mb-2">Análisis del Poder</h4>
+                    <p class="text-sm">Reside en la capacidad de imbuir de significado a actos simples. Un nombre o una frase se convierten en vehículos para transmitir una visión, una promesa y una herencia, influyendo en las expectativas de millones.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cierre -->
+        <section class="slide bg-intro">
+            <div class="text-center relative z-10 w-full max-w-4xl">
+                <h2 class="text-4xl font-bold mb-8 stagger-1" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Conclusión: La Interconexión de los Poderes</h2>
+                <p class="text-lg text-gray-300 stagger-2" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+                    El caso demuestra cómo los poderes se entrelazan y se refuerzan mutuamente:
+                </p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 text-center text-sm">
+                    <div class="card stagger-2 border-2 border-orange-400/50">El poder <span class="font-bold text-orange-400">Económico</span><br>influye en decisiones políticas.</div>
+                    <div class="card stagger-3 border-2 border-blue-400/50">El poder <span class="font-bold text-blue-400">Político</span><br>usa símbolos para legitimarse.</div>
+                    <div class="card stagger-4 border-2 border-purple-400/50">El poder <span class="font-bold text-purple-400">Coercitivo</span><br>protege rituales simbólicos.</div>
+                    <div class="card stagger-5 border-2 border-yellow-400/50">El poder <span class="font-bold text-yellow-400">Simbólico</span><br>genera beneficios económicos.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bibliografía -->
+        <section class="slide bg-bibliography">
+            <div class="w-full max-w-5xl text-left">
+                <h2 class="text-3xl font-bold mb-6 text-center text-gray-100 stagger-1">Bibliografía</h2>
+                <div class="text-xs stagger-2">
+                    <ul class="space-y-2">
+                        <li>Carrascón, I. (2025, 9 de mayo). *La crisis económica que sufre el Vaticano, la primera tarea de León XIV*. Newtral.es. https://www.newtral.es/crisis-vaticano/20250509/</li>
+                        <li>Charry, F. (2018, 12 de septiembre). *Comunicación y contexto social de John B. Thompson*. Omnia Journal, 4(44). Universidad del Rosario. https://www.urosario.edu.co/en/node/17</li>
+                        <li>El Universal (Redacción). (2025, 8 de mayo). *FOTOS: Fumata blanca en la Capilla Sixtina, celebran miles elección de un nuevo Papa en El Vaticano*. El Universal (México). https://www.eluniversal.com.mx/mundo/fotos-fumata-blanca-en-la-capilla-sixtina-celebran-miles-eleccion-de-un-nuevo-papa-en-el-vaticano/</li>
+                        <li>Franco, T. (2025, 5 de mayo). *Lo que nadie te cuenta sobre el impacto económico de un nuevo Papa*. Revista Caras (México). https://www.caras.com.mx/arte-cultura/lo-que-nadie-te-cuenta-sobre-el-impacto-economico-de-un-nuevo-papa/</li>
+                        <li>Giraldo, C. (2025, 8 de mayo). *Robert Prevost, papa León XIV y su emotiva mención al Perú: "Un saludo de modo particular a mi querida diócesis de Chiclayo"*. Infobae. https://www.infobae.com/peru/2025/05/08/robert-francis-prevost-papa-leon-xiv-y-su-emotivo-saludo-al-peru-un-saludo-de-modo-particular-a-mi-querida-diocesis-de-chiclayo/</li>
+                        <li>Livesay, C. (2025, 7 de mayo). *At 2025 papal conclave, some contentious issues await the new pope*. CBS News. https://www.cbsnews.com/news/conclave-2025-pope-francis-replacement-contentious-issues/</li>
+                        <li>McElwee, J. (2025, 28 de abril). *New pope's challenges: Budget crisis, role of women and decline in Europe*. Reuters. https://www.reuters.com/world/europe/new-pope-will-face-vatican-budget-crisis-myriad-other-problems-2025-04-28/</li>
+                        <li>Opus Dei. (2025, 13 de septiembre). *De Chicago a Roma pasando por Perú: el Papa León XIV celebra 70 años*. Opusdei.org. https://opusdei.org/es/article/cumpleanos-papa-leon-xiv-14-septiembre-robert-francis-prevost/</li>
+                        <li>Ore, D. C. (2025, 8 de mayo). *"El papa León XIV es peruano, Dios ama el Perú": Dina Boluarte reacciona a la elección Robert Prevost*. Infobae. https://www.infobae.com/peru/2025/05/08/el-papa-leon-xiv-es-peruano-dios-ama-el-peru-dina-boluarte-reacciona-a-la-eleccion-robert-prevost/</li>
+                        <li>Sagastume, E. (2025, 8 de mayo). *Robert Francis Prevost es elegido Papa León XIV: El primer Papa estadounidense en la historia*. KKTV News. https://www.kktv.com/2025/05/09/robert-francis-prevost-es-elegido-papa-len-xiv-el-primer-papa-estadounidense-en-la-historia/</li>
+                        <li>White, C. & Grimaldi, J. (2025, 8 de mayo). *HABEMUS PAPAM: Leo XIV is 1st US pope chosen to lead Catholic Church*. National Catholic Reporter. https://www.ncronline.org/vatican/habemus-papam-leo-xiv-1st-american-pope-chosen-lead-catholic-church</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.slide');
+            let currentSlide = 0;
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === index);
+                });
+            }
+
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % slides.length;
+                showSlide(currentSlide);
+            }
+
+            function prevSlide() {
+                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+                showSlide(currentSlide);
+            }
+
+            document.body.addEventListener('click', (e) => {
+                if (e.target.tagName.toLowerCase() === 'a' || e.target.tagName.toLowerCase() === 'button') {
+                    return;
+                }
+                nextSlide();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    e.preventDefault();
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    prevSlide();
+                }
+            });
+            
+            showSlide(currentSlide);
+        });
+    </script>
+</body>
+</html>
+
